@@ -28,7 +28,8 @@ private:
 	bool m_playerFacingRight;
 
 	Obstacle* m_pObstacle;
-	
+	bool m_bDebugMode;
+	bool m_bHpressed;
 };
 
 #endif /* defined (__PLAY_SCENE__) */
