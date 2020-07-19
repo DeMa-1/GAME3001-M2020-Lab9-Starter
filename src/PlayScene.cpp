@@ -32,6 +32,9 @@ void PlayScene::draw()
 		Util::DrawLine(m_pObstacle->getTransform()->position, m_pObstacle->getTransform()->position);
 		Util::DrawRect(m_pObstacle->getTransform()->position - glm::vec2(m_pObstacle->getWidth() * 0.5f, m_pObstacle->getHeight() * 0.5f), m_pObstacle->getWidth(), m_pObstacle->getHeight());
 
+		m_displayGrid();
+		m_displayGridLOS();
+
 	}
 	
 	
@@ -44,6 +47,8 @@ void PlayScene::update()
 	CollisionManager::LOSCheck(m_pPlayer, m_pPlaneSprite, m_pObstacle);
 	CollisionManager::AABBCheck(m_pPlayer, m_pPlaneSprite);
 	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle);
+
+	m_setGridLOS();
 }
 
 void PlayScene::clean()
@@ -209,6 +214,7 @@ void PlayScene::handleEvents()
 
 void PlayScene::start()
 {
+	m_buildGrid();
 	m_bDebugMode = false;
 	m_bPatrolMode = false;
 
@@ -224,5 +230,63 @@ void PlayScene::start()
 	// Obstacle Texture
 	m_pObstacle = new Obstacle();
 	addChild(m_pObstacle);
+	
+}
+
+void PlayScene::m_buildGrid()
+{
+	//Logic to add Path nodes
+	for (int row = 0; row < Config::ROW_NUM; ++row)
+	{
+		for (int col = 0; col < Config::COL_NUM; ++col)
+		{
+			PathNode* pathNode = new PathNode();
+			pathNode->getTransform()->position = glm::vec2(pathNode->getWidth() * col + Config::TILE_SIZE * 0.5, pathNode->getHeight() * row + Config::TILE_SIZE * 0.5);
+			m_pGrid.push_back(pathNode);
+
+			/*std::cout << "grid position: " << row * Config::COL_NUM + col << std::endl;*/
+		}
+	}
+	std::cout << "number of nodes: " << m_pGrid.size() << std::endl;
+}
+
+void PlayScene::m_displayGrid()
+{
+	//Logic to add Path nodes to the scene
+	for (int row = 0; row < Config::ROW_NUM; ++row)
+	{
+		for (int col = 0; col < Config::COL_NUM; ++col)
+		{
+			/*Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position + glm::vec2(m_pGrid[row * Config::COL_NUM + col]->getWidth() * 0.5f, 0.0f)*/
+				/*m_pGrid[row * Config::COL_NUM + col]->getHeight() * 0.5f), 5, 5);*/
+				
+			/*std::cout << "grid display position: " << row * Config::COL_NUM + col << std::endl;*/
+
+			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position - glm::vec2(m_pGrid[row * Config::COL_NUM + col]->getWidth() * 0.5f), 40, 40);
+
+			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position, 5, 5);
+		}
+	}
+}
+
+void PlayScene::m_displayGridLOS()
+{
+	for (auto node : m_pGrid)
+		if (!node->getLOS())
+		{
+			{
+				auto colour = glm::vec4(1, 0, 0, 1);
+
+				Util::DrawLine(node->getTransform()->position, m_pPlayer->getTransform()->position, colour);
+			}
+		}
+}
+
+void PlayScene::m_setGridLOS()
+{
+	for (auto node : m_pGrid)
+	{
+		node->setLOS(CollisionManager::LOSCheck(node, m_pPlayer, m_pObstacle));
+	}
 	
 }

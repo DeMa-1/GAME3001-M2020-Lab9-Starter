@@ -2,9 +2,9 @@
 #ifndef _PATH_NODE_
 #define _PATH_NODE_
 
-#include "GameObject.h"
+#include "DisplayObject.h"
 
-class PathNode : GameObject
+class PathNode : public DisplayObject
 {
 public:
 	PathNode();
