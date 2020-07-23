@@ -3,7 +3,7 @@
 #define __PLAY_SCENE__
 
 #include "Scene.h"
-#include "Plane.h"
+#include "ship.h"
 #include "Player.h"
 #include "Button.h"
 #include "Obstacle.h"
@@ -32,10 +32,10 @@ private:
 	//MEMBER VARIABLES
 	glm::vec2 m_mousePosition;
 
-	Plane* m_pPlaneSprite;
+	Ship *m_pShip{};
 	Player* m_pPlayer;
 	bool m_playerFacingRight;
-
+	bool m_playerFacingUp;
 	Obstacle* m_pObstacle;
 
 	bool m_bDebugMode;

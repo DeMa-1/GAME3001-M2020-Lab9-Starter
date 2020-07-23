@@ -95,8 +95,8 @@ void Game::start()
 {
 	m_currentSceneState = NO_SCENE;
 
-	//changeSceneState(START_SCENE);
-	changeSceneState(PLAY_SCENE);
+	changeSceneState(START_SCENE);
+	
 }
 
 bool Game::isRunning() const
@@ -124,16 +124,16 @@ void Game::changeSceneState(const SceneState new_state)
 {
 	if (new_state != m_currentSceneState) {
 
-		// scene clean up
-		if (m_currentSceneState != NO_SCENE) 
-		{
-			m_currentScene->clean();
-			std::cout << "cleaning previous scene" << std::endl;
-			FontManager::Instance()->clean();
-			std::cout << "cleaning FontManager" << std::endl;
-			TextureManager::Instance()->clean();
-			std::cout << "cleaning TextureManager" << std::endl;
-		}
+		//// scene clean up
+		//if (m_currentSceneState != END_SCENE) 
+		//{
+		//	m_currentScene->clean();
+		//	std::cout << "cleaning previous scene" << std::endl;
+		//	/*FontManager::Instance()->clean();
+		//	std::cout << "cleaning FontManager" << std::endl;
+		//	TextureManager::Instance()->clean();
+		//	std::cout << "cleaning TextureManager" << std::endl;*/
+		//}
 
 		m_currentScene = nullptr;
 
@@ -185,6 +185,10 @@ void Game::update() const
 void Game::clean() const
 {
 	std::cout << "cleaning game" << std::endl;
+	FontManager::Instance()->clean();
+	std::cout << "cleaning FontManager" << std::endl;
+	TextureManager::Instance()->clean();
+	std::cout << "cleaning TextureManager" << std::endl;
 
 	TTF_Quit();
 

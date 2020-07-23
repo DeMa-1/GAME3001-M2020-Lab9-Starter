@@ -19,14 +19,14 @@ void PlayScene::draw()
 	if (m_bDebugMode)
 	{
 		//Line used to show if collision between obstacle and player
-		Util::DrawLine(m_pPlayer->getTransform()->position, m_pPlaneSprite->getTransform()->position);
+		Util::DrawLine(m_pPlayer->getTransform()->position, m_pShip->getTransform()->position);
 
 		//Below is Debug box for the player
 		Util::DrawRect(m_pPlayer->getTransform()->position - glm::vec2(m_pPlayer->getWidth() * 0.5f, m_pPlayer->getHeight() * 0.5f), m_pPlayer->getWidth(), m_pPlayer->getHeight());
 
 		////Below is Debug box for the plane
-		Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlaneSprite->getTransform()->position);
-		Util::DrawRect(m_pPlaneSprite->getTransform()->position - glm::vec2(m_pPlaneSprite->getWidth() * 0.5f, m_pPlaneSprite->getHeight() * 0.5f), m_pPlaneSprite->getWidth(), m_pPlaneSprite->getHeight());
+		Util::DrawLine(m_pShip->getTransform()->position, m_pShip->getTransform()->position);
+		Util::DrawRect(m_pShip->getTransform()->position - glm::vec2(m_pShip->getWidth() * 0.5f, m_pShip->getHeight() * 0.5f), m_pShip->getWidth(), m_pShip->getHeight());
 
 		//Below is Dubeg box for the Obstacle
 		Util::DrawLine(m_pObstacle->getTransform()->position, m_pObstacle->getTransform()->position);
@@ -44,8 +44,8 @@ void PlayScene::update()
 {
 	updateDisplayList();
 
-	CollisionManager::LOSCheck(m_pPlayer, m_pPlaneSprite, m_pObstacle);
-	CollisionManager::AABBCheck(m_pPlayer, m_pPlaneSprite);
+	CollisionManager::LOSCheck(m_pPlayer, m_pShip, m_pObstacle);
+	CollisionManager::AABBCheck(m_pPlayer, m_pShip);
 	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle);
 
 	m_setGridLOS();
@@ -125,13 +125,37 @@ void PlayScene::handleEvents()
 			if (m_playerFacingRight)
 			{
 				m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
+				m_playerFacingRight = true;
+
 			}
 			else
 			{
 				m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
+				m_playerFacingRight = false;
 			}
 		}
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
+		{
+			m_pPlayer->setAnimationState(PLAYER_RUN_UP);
+			m_playerFacingUp = true;
+
+			m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, -5.0f);
+			m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity;
+			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
+		}
+		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S))
+		{
+			m_pPlayer->setAnimationState(PLAYER_RUN_DOWN);
+			m_playerFacingUp = false;
+
+			m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, 5.0f);
+			m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity;
+			m_pPlayer->getRigidBody()->velocity *= m_pPlayer->getRigidBody()->velocity * 0.9f;
+		}
+	
+		
 	}
+	
 	//H Key Section
 	if (!m_bDebugKeys[H_KEY])
 	{
@@ -217,10 +241,11 @@ void PlayScene::start()
 	m_buildGrid();
 	m_bDebugMode = false;
 	m_bPatrolMode = false;
-
-	// Plane Sprite
-	m_pPlaneSprite = new Plane();
-	addChild(m_pPlaneSprite);
+	
+	//Plane Sprite
+	m_pShip = new Ship();
+	m_pShip->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pShip);
 
 	// Player Sprite
 	m_pPlayer = new Player();

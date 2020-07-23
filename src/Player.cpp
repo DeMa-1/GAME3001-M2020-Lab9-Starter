@@ -4,22 +4,22 @@
 Player::Player(): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 {
 	TextureManager::Instance()->loadSpriteSheet(
-		"../Assets/sprites/atlas.txt",
-		"../Assets/sprites/atlas.png", 
-		"spritesheet");
+		"../Assets/sprites/skeleton.txt",
+		"../Assets/sprites/skeleton.png", 
+		"skeleton");
 
-	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("spritesheet"));
+	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("skeleton"));
 	
 	// set frame width
-	setWidth(53);
+	setWidth(64);
 
 	// set frame height
-	setHeight(58);
+	setHeight(64);
 
 	getTransform()->position = glm::vec2(600.0f, 500.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-	getRigidBody()->maxSpeed = 10.0f;
+	getRigidBody()->maxSpeed = 5.0f;
 	getRigidBody()->isColliding = false;
 	setType(PLAYER);
 
@@ -39,21 +39,34 @@ void Player::draw()
 	switch(m_currentAnimationState)
 	{
 	case PLAYER_IDLE_RIGHT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("idle"),
-			x, y, 0.12f, 0, 255, true);
+		TextureManager::Instance()->playAnimation("skeleton", getAnimation("idle"),
+			x, y, 0.45f, 0, 255, true);
 		break;
 	case PLAYER_IDLE_LEFT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("idle"),
-			x, y, 0.12f, 0, 255, true, SDL_FLIP_HORIZONTAL);
+		TextureManager::Instance()->playAnimation("skeleton", getAnimation("idle"),
+			x, y, 0.45f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
+
+
 	case PLAYER_RUN_RIGHT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("run"),
-			x, y, 0.25f, 0, 255, true);
+		TextureManager::Instance()->playAnimation("skeleton", getAnimation("run"),
+			x, y, 0.45f, 0, 255, true);
 		break;
 	case PLAYER_RUN_LEFT:
-		TextureManager::Instance()->playAnimation("spritesheet", getAnimation("run"),
-			x, y, 0.25f, 0, 255, true, SDL_FLIP_HORIZONTAL);
+		TextureManager::Instance()->playAnimation("skeleton", getAnimation("run"),
+			x, y, 0.45f, 0, 255, true, SDL_FLIP_HORIZONTAL);
 		break;
+
+
+	case PLAYER_RUN_UP:
+		TextureManager::Instance()->playAnimation("skeleton", getAnimation("runup"),
+			x, y, 0.45f, 0, 255, true);
+		break;
+	case PLAYER_RUN_DOWN:
+		TextureManager::Instance()->playAnimation("skeleton", getAnimation("rundown"),
+			x, y, 0.45f, 0, 255, true);
+		break;
+
 	default:
 		break;
 	}
@@ -76,22 +89,36 @@ void Player::setAnimationState(const PlayerAnimationState new_state)
 void Player::m_buildAnimations()
 {
 	Animation idleAnimation = Animation();
-
 	idleAnimation.name = "idle";
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-idle-0"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-idle-1"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-idle-2"));
-	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-idle-3"));
-
+	idleAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-idle-1"));	
 	setAnimation(idleAnimation);
 
 	Animation runAnimation = Animation();
-
 	runAnimation.name = "run";
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-run-0"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-run-1"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-run-2"));
-	runAnimation.frames.push_back(getSpriteSheet()->getFrame("megaman-run-3"));
-
+	runAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-right-2"));
+	runAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-right-3"));
+	runAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-right-4"));
+	runAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-right-5"));
 	setAnimation(runAnimation);
+
+	Animation runupAnimation = Animation();
+	runupAnimation.name = "runup";
+	runupAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-up-1"));
+	runupAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-up-3"));
+	runupAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-up-4"));
+	runupAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-up-6"));
+	runupAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-up-7"));
+	runupAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-up-8"));
+	setAnimation(runupAnimation);
+
+	Animation rundownAnimation = Animation();
+	rundownAnimation.name = "rundown";
+	rundownAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-down-1"));
+	rundownAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-down-3"));
+	rundownAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-down-4"));
+	rundownAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-down-6"));
+	rundownAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-down-7"));
+	rundownAnimation.frames.push_back(getSpriteSheet()->getFrame("skel-down-8"));
+	setAnimation(rundownAnimation);
+
 }

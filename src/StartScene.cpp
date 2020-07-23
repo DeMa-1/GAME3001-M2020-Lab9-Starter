@@ -32,9 +32,6 @@ void StartScene::clean()
 	delete m_pInstructionsLabel;
 	m_pInstructionsLabel = nullptr;
 
-	delete m_pShip;
-	m_pShip = nullptr;
-
 	delete m_pStartButton;
 	m_pStartButton = nullptr;
 
@@ -64,13 +61,18 @@ void StartScene::start()
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 
-	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
+	const SDL_Color black = { 0, 0, 0, 0};
+	m_pStartLabel = new Label("Name: Dejan Matic StudentID: 101275617", "Consolas", 20, black, glm::vec2(400.0f, 90.0f));
+	m_pStartLabel->setParent(this);
+	addChild(m_pStartLabel);
+
+	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 130.0f));
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);
 
-	m_pShip = new Ship();
+	/*m_pShip = new Ship();
 	m_pShip->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pShip);
+	addChild(m_pShip);*/
 
 	// Start Button
 	m_pStartButton = new Button();
