@@ -35,7 +35,7 @@ public:
 
 	// gamecontroller events
 	GameController* getGameController(int controller_number);
-	
+
 private:
 	// Hide Constructor and Destructor 
 	EventManager();
@@ -44,7 +44,7 @@ private:
 	EventManager& operator=(const EventManager&) = delete;
 
 	/*------- PRIVATE MEMBER FUNCTIONS -------*/
-	
+
 	// handle keyboard events
 	void onKeyDown();
 	void onKeyUp();
@@ -59,7 +59,7 @@ private:
 	void m_initializeControllers();
 
 	/*------- PRIVATE MEMBER VARIABLES -------*/
-	
+
 	// keyboard states array
 	const Uint8* m_keyStates;
 
@@ -70,7 +70,7 @@ private:
 
 	// GameControllers
 	std::vector<GameController*> m_pGameControllers;
-	
+
 	// is the Event Manager active
 	bool m_isActive;
 };

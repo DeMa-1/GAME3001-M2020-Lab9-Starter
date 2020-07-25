@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject():
+GameObject::GameObject() :
 	m_width(0), m_height(0), m_type(NONE)
 {
 }
@@ -8,12 +8,12 @@ GameObject::GameObject():
 GameObject::~GameObject()
 = default;
 
-Transform* GameObject::getTransform() 
+Transform* GameObject::getTransform()
 {
 	return &m_transform;
 }
 
-RigidBody* GameObject::getRigidBody() 
+RigidBody* GameObject::getRigidBody()
 {
 	return &m_rigidBody;
 }

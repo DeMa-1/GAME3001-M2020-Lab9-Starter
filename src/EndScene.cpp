@@ -42,12 +42,12 @@ void EndScene::handleEvents()
 	// Keyboard Events
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
-		TheGame::Instance()->quit();
+		Game::Instance()->quit();
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+		Game::Instance()->changeSceneState(PLAY_SCENE);
 	}
 }
 
@@ -64,7 +64,7 @@ void EndScene::start()
 	m_pRestartButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pRestartButton->setActive(false);
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+		Game::Instance()->changeSceneState(PLAY_SCENE);
 	});
 
 	m_pRestartButton->addEventListener(MOUSE_OVER, [&]()->void

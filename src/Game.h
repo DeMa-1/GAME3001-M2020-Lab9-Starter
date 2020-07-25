@@ -70,7 +70,5 @@ private:
 	static Game* s_pInstance;
 };
 
-typedef Game TheGame;
-
 #endif /* defined (__GAME__) */
 

@@ -29,7 +29,7 @@ public:
 
 	// getters and setters for physics properties
 	RigidBody* getRigidBody();
-	
+
 	// getters and setters for game object properties
 	int getWidth() const;
 	int getHeight() const;
@@ -41,7 +41,7 @@ public:
 private:
 	// transform component
 	Transform m_transform;
-	
+
 	// rigid body component
 	RigidBody m_rigidBody;
 

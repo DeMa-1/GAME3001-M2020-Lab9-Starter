@@ -19,15 +19,15 @@ int main(int argc, char * args[])
 	freopen("CON", "w", stdout);
 
 
-	TheGame::Instance()->init("SDLEngine 0.21", 100, 100, 800, 600, false);
+	Game::Instance()->init("SDLEngine 0.21", 100, 100, 800, 600, false);
 
-	while (TheGame::Instance()->isRunning())
+	while (Game::Instance()->isRunning())
 	{
 		frameStart = SDL_GetTicks();
 
-		TheGame::Instance()->handleEvents();
-		TheGame::Instance()->update();
-		TheGame::Instance()->render();
+		Game::Instance()->handleEvents();
+		Game::Instance()->update();
+		Game::Instance()->render();
 
 		frameTime = SDL_GetTicks() - frameStart;
 		if (frameTime< DELAY_TIME)
@@ -36,11 +36,11 @@ int main(int argc, char * args[])
 		}
 
 		frames++;
-		TheGame::Instance()->setFrames(frames);
+		Game::Instance()->setFrames(frames);
 
 	}
 
-	TheGame::Instance()->clean();
+	Game::Instance()->clean();
 	return 0;
 }
 
