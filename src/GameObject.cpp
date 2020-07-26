@@ -43,6 +43,16 @@ void GameObject::setHeight(const int new_height)
 	m_height = new_height;
 }
 
+void GameObject::setPosX(int new_posX)
+{
+	m_posX = new_posX;
+}
+
+void GameObject::setPosY(int new_posY)
+{
+	m_posY = new_posY;
+}
+
 void GameObject::setType(const GameObjectType new_type)
 {
 	m_type = new_type;

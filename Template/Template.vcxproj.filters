@@ -25,6 +25,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{21657abb-080f-4d0e-bc26-e9581cebc5a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Abilities">
+      <UniqueIdentifier>{0afb4339-a0e2-4cff-a6d2-62eb30d286ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\StartScene.cpp">
@@ -107,6 +110,12 @@
     </ClCompile>
     <ClCompile Include="..\src\PathNode.cpp">
       <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Ability.cpp">
+      <Filter>Abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Melee.cpp">
+      <Filter>Abilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="..\src\PathNode.h">
       <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Ability.h">
+      <Filter>Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Melee.h">
+      <Filter>Abilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

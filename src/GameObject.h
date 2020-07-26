@@ -35,6 +35,8 @@ public:
 	int getHeight() const;
 	void setWidth(int new_width);
 	void setHeight(int new_height);
+	void setPosX(int new_posX);
+	void setPosY(int new_posY);
 	GameObjectType getType() const;
 	void setType(GameObjectType new_type);
 
@@ -48,7 +50,10 @@ private:
 	// size variables
 	int m_width;
 	int m_height;
+	int m_posX;
+	int m_posY;
 	GameObjectType m_type;
+
 };
 
 #endif /* defined (__GAME_OBJECT__) */

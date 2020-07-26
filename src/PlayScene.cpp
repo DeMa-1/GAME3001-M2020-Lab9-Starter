@@ -37,7 +37,7 @@ void PlayScene::draw()
 		Util::DrawRect(m_pObstacle->getTransform()->position - glm::vec2(m_pObstacle->getWidth() * 0.5f, m_pObstacle->getHeight() * 0.5f), m_pObstacle->getWidth(), m_pObstacle->getHeight());
 
 		m_displayGrid();
-		/*m_displayGridLOS();*/
+		m_displayGridLOS();
 		
 	}
 	
@@ -314,7 +314,7 @@ void PlayScene::start()
 	//Plane Sprite
 	m_pPlaneSprite = new Plane();
 	m_pPlaneSprite->getTransform()->position = m_pPatrolPath[0]->getTransform()->position;
-	m_pPlaneSprite->getRigidBody()->maxSpeed = 5.0f;
+	m_pPlaneSprite->getRigidBody()->maxSpeed = 4.0f;
 	addChild(m_pPlaneSprite);
 
 	// Player Sprite
@@ -363,13 +363,14 @@ void PlayScene::m_displayGrid()
 				/*m_pGrid[row * Config::COL_NUM + col]->getHeight() * 0.5f), 5, 5);*/
 				
 			/*std::cout << "grid display position: " << row * Config::COL_NUM + col << std::endl;*/
-			auto colour = glm::vec4(1, 0, 1, 1);
+			auto colour = glm::vec4(0, 0, 1, 1);
+			Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlayer->getTransform()->position, colour);
 
 			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position - glm::vec2(m_pGrid[row * Config::COL_NUM + col]->getWidth() * 0.5f), 40, 40);
 
 			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position, 5, 5);
 
-			Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlayer->getTransform()->position, colour);
+			
 		}
 	}
 }
@@ -408,6 +409,7 @@ void PlayScene::m_buildPatrolPath()
 	{
 		m_pPatrolPath.push_back(m_pGrid[i * Config::COL_NUM + Config::COL_NUM - 1]);
 	}
+
 	//Plane moves left
 	for (auto i = 1; i < Config::COL_NUM; i++)
 	{
