@@ -37,8 +37,8 @@ void PlayScene::draw()
 		Util::DrawRect(m_pObstacle->getTransform()->position - glm::vec2(m_pObstacle->getWidth() * 0.5f, m_pObstacle->getHeight() * 0.5f), m_pObstacle->getWidth(), m_pObstacle->getHeight());
 
 		m_displayGrid();
-		m_displayGridLOS();
-
+		/*m_displayGridLOS();*/
+		
 	}
 	
 	
@@ -237,6 +237,9 @@ void PlayScene::handleEvents()
 	}
 	if (EventManager::Instance().isKeyUp(SDL_SCANCODE_P))
 	{
+		//movePlanetoTargetNode must be in here because when key pressed and released the plane animation will play as long as P is not pressed again. 
+		//If in isKeyDown then it will only show 1 frame for each button press
+		m_movePlanetoTargetNode();
 		m_bDebugKeys[P_KEY] = false;
 	}
 
@@ -256,20 +259,69 @@ void PlayScene::handleEvents()
 	}
 }
 
+
+void PlayScene::m_movePlanetoTargetNode()
+{
+	if (m_bPatrolMode)
+	{
+		m_pTargetPathNode = m_pPatrolPath[m_targetPathNodeIndex];
+		auto targetVector = Util::normalize(m_pTargetPathNode->getTransform()->position - m_pPlaneSprite->getTransform()->position);
+
+		//rotate Plane according to the direction of travel
+		//x-axis
+		if (targetVector.x == 1)
+		{
+			m_pPlaneSprite->setAngle(90.0f);
+		}
+		else if (targetVector.x == -1)
+		{
+			m_pPlaneSprite->setAngle(-90.0f);
+		}
+		//y-axis
+		if (targetVector.y == 1)
+		{
+			m_pPlaneSprite->setAngle(180.0f);
+		}
+		else if (targetVector.y == -1)
+		{
+			m_pPlaneSprite->setAngle(0.0f);
+		}
+
+		m_pPlaneSprite->getRigidBody()->velocity = targetVector;
+		m_pPlaneSprite->getTransform()->position += m_pPlaneSprite->getRigidBody()->velocity * m_pPlaneSprite->getRigidBody()->maxSpeed;
+		if (m_pPlaneSprite->getTransform()->position == m_pTargetPathNode->getTransform()->position)
+		{
+			m_targetPathNodeIndex++;
+			if (m_targetPathNodeIndex > m_pPatrolPath.size() - 1)
+			{
+				m_targetPathNodeIndex = 0;
+			}
+		}
+	}
+}
+
 void PlayScene::start()
 {
 	m_buildGrid();
+	m_buildPatrolPath();
+	m_displayPatrolPath();
+
+	m_targetPathNodeIndex = 1;
+
 	m_bDebugMode = false;
 	m_bPatrolMode = false;
 	
 	//Plane Sprite
 	m_pPlaneSprite = new Plane();
+	m_pPlaneSprite->getTransform()->position = m_pPatrolPath[0]->getTransform()->position;
+	m_pPlaneSprite->getRigidBody()->maxSpeed = 5.0f;
 	addChild(m_pPlaneSprite);
 
 	// Player Sprite
 	m_pPlayer = new Player();
+	m_pPlayer->getTransform()->position = glm::vec2(600.0f, 400.0f);
 	addChild(m_pPlayer);
-	m_playerFacingRight = true;
+	m_playerFacingRight = false;
 
 	// Obstacle Texture
 	m_pObstacle = new Obstacle();
@@ -311,10 +363,13 @@ void PlayScene::m_displayGrid()
 				/*m_pGrid[row * Config::COL_NUM + col]->getHeight() * 0.5f), 5, 5);*/
 				
 			/*std::cout << "grid display position: " << row * Config::COL_NUM + col << std::endl;*/
+			auto colour = glm::vec4(1, 0, 1, 1);
 
 			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position - glm::vec2(m_pGrid[row * Config::COL_NUM + col]->getWidth() * 0.5f), 40, 40);
 
 			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position, 5, 5);
+
+			Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlayer->getTransform()->position, colour);
 		}
 	}
 }
@@ -325,7 +380,7 @@ void PlayScene::m_displayGridLOS()
 		if (!node->getLOS())
 		{
 			{
-				auto colour = glm::vec4(1, 0, 0, 1);
+				auto colour = glm::vec4(1, 0, 1, 1);
 
 				Util::DrawLine(node->getTransform()->position, m_pPlayer->getTransform()->position, colour);
 			}
@@ -340,3 +395,36 @@ void PlayScene::m_setGridLOS()
 	}
 	
 }
+
+void PlayScene::m_buildPatrolPath()
+{
+	//Plane moves right
+	for (auto i = 0; i < Config::COL_NUM; i++)
+	{
+		m_pPatrolPath.push_back(m_pGrid[i]);
+	}
+	//Plane moves down
+	for (auto i = 1; i < Config::ROW_NUM; i++)
+	{
+		m_pPatrolPath.push_back(m_pGrid[i * Config::COL_NUM + Config::COL_NUM - 1]);
+	}
+	//Plane moves left
+	for (auto i = 1; i < Config::COL_NUM; i++)
+	{
+		m_pPatrolPath.push_back(m_pGrid[Config::COL_NUM * Config::ROW_NUM - 1 - i]);
+	}
+	//Plane Moves up
+	for (auto i = Config::ROW_NUM - 2; i > 0; i--)
+	{
+		m_pPatrolPath.push_back(m_pGrid[i * Config::COL_NUM]);
+	}
+}
+
+void PlayScene::m_displayPatrolPath()
+{
+	for (auto node : m_pPatrolPath)
+	{
+		std::cout << "(" << node->getTransform()->position.x << ", " << node->getTransform()->position.y << ")" << std::endl;
+	}
+}
+

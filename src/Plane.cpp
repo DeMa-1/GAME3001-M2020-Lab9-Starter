@@ -37,7 +37,7 @@ void Plane::draw()
 	// draw the plane sprite with simple propeller animation
 	TextureManager::Instance()->playAnimation(
 		"spritesheet", getAnimation("plane"),
-		x, y, 0.5f, 0, 255, true);
+		x, y, 0.5f, m_angle, 255, true);
 }
 
 void Plane::update()
@@ -46,6 +46,11 @@ void Plane::update()
 
 void Plane::clean()
 {
+}
+
+void Plane::setAngle(float angle)
+{
+	m_angle = angle;
 }
 
 void Plane::m_buildAnimations()

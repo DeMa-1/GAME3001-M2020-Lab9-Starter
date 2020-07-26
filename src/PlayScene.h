@@ -43,6 +43,14 @@ private:
 	bool m_bDebugKeys[NUM_OF_DEBUG_KEYS];
 
 	std::vector<PathNode*> m_pGrid;
+	//Lab 9 code above. Lab 10 added code below
+	std::vector<PathNode*> m_pPatrolPath;
+	void m_buildPatrolPath();
+	void m_displayPatrolPath();
+	void m_movePlanetoTargetNode();
+	int m_targetPathNodeIndex;
+	PathNode* m_pTargetPathNode;
+	
 
 };
 
