@@ -25,10 +25,8 @@ public:
 	virtual Ability* getAbility() = 0;
 
 protected:
-	SpriteSheet* m_pSpriteSheetGem;
 	std::unordered_map<std::string, Animation> m_pAnimations;
 	bool m_abilityDone = false;
-	int m_pickeableTimer;
 	bool m_running = false;
 	bool m_pickable = false;
 	int m_angle;

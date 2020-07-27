@@ -73,7 +73,7 @@ void PlayScene::handleEvents()
 			if (EventManager::Instance().getGameController(0)->LEFT_STICK_X > deadZone)
 			{
 				/*m_pPlayer->getRigidBody()->velocity = glm::vec2(5.0f, 0.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.x;
+				m_pPlayer->getTransform()->position.x += m_pPlayer->getRigidBody()->velocity.x;
 				m_pPlayer->getRigidBody()->velocity.x *= m_pPlayer->getRigidBody()->velocity.x * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 				/*m_playerFacingRight = true;*/
@@ -82,7 +82,7 @@ void PlayScene::handleEvents()
 			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_X < deadZone)
 			{
 			/*	m_pPlayer->getRigidBody()->velocity = glm::vec2(-5.0f, 0.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.x;
+				m_pPlayer->getTransform()->position.x += m_pPlayer->getRigidBody()->velocity.x;
 				m_pPlayer->getRigidBody()->velocity.x *= m_pPlayer->getRigidBody()->velocity.x * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
 				/*m_playerFacingRight = false;*/
@@ -102,7 +102,7 @@ void PlayScene::handleEvents()
 			if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y > deadZone)
 			{
 				/*m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, -5.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.y;
+				m_pPlayer->getTransform()->position.y += m_pPlayer->getRigidBody()->velocity.y;
 			    m_pPlayer->getRigidBody()->velocity.y *= m_pPlayer->getRigidBody()->velocity.y * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_UP);
 				/*m_playerFacingRight = true;*/
@@ -111,7 +111,7 @@ void PlayScene::handleEvents()
 			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y < deadZone)
 			{
 				/*m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, 5.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.y;
+				m_pPlayer->getTransform()->position.y += m_pPlayer->getRigidBody()->velocity.y;
 				m_pPlayer->getRigidBody()->velocity.y *= m_pPlayer->getRigidBody()->velocity.y * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_DOWN);
 				/*m_playerFacingRight = false;*/
@@ -175,7 +175,18 @@ void PlayScene::handleEvents()
 	
 		
 	}
-	
+
+	//Change Ability
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_N))
+	{
+			m_pPlayer->changeAbility();
+	}
+	//Use Current Ability
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_M))
+	{
+		m_pPlayer->useCurrentAbility(1);
+	}
+
 	//H Key Section
 	if (!m_bDebugKeys[H_KEY])
 	{
@@ -318,7 +329,7 @@ void PlayScene::start()
 	addChild(m_pPlaneSprite);
 
 	// Player Sprite
-	m_pPlayer = new Player();
+	m_pPlayer = new Player(glm::vec2(600.0f, 400.0f));
 	m_pPlayer->getTransform()->position = glm::vec2(600.0f, 400.0f);
 	addChild(m_pPlayer);
 	m_playerFacingRight = false;
@@ -333,6 +344,7 @@ void PlayScene::start()
 	SoundManager::Instance().setAllVolume(10);
 	//Sound-FX
 	SoundManager::Instance().load("../Assets/audio/Grunting-sound.mp3", "Grunt", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/sword-1b.wav", "Sword", SOUND_SFX);
 }
 
 void PlayScene::m_buildGrid()

@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "Player.h"
+#include "Melee.h"
 #include "Plane.h"
 #include "Button.h"
 #include "Obstacle.h"
