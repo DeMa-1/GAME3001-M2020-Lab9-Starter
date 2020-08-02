@@ -37,6 +37,9 @@ private:
 	bool m_playerFacingRight;
 	bool m_playerFacingUp;
 	Obstacle* m_pObstacle;
+	Obstacle* m_pObstacle2;
+	Obstacle* m_pObstacle3;
+	Obstacle* m_pObstacle4;
 
 	bool m_bDebugMode;
 	bool m_bPatrolMode;

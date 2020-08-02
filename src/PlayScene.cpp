@@ -21,6 +21,9 @@ void PlayScene::draw()
 	{
 		//Line used to show if collision between obstacle and player
 		Util::DrawLine(m_pPlayer->getTransform()->position, m_pObstacle->getTransform()->position);
+		Util::DrawLine(m_pPlayer->getTransform()->position, m_pObstacle2->getTransform()->position);
+		Util::DrawLine(m_pPlayer->getTransform()->position, m_pObstacle3->getTransform()->position);
+		Util::DrawLine(m_pPlayer->getTransform()->position, m_pObstacle4->getTransform()->position);
 
 		//Line used to show if collision between ship and player
 		Util::DrawLine(m_pPlayer->getTransform()->position, m_pPlaneSprite->getTransform()->position);
@@ -35,7 +38,16 @@ void PlayScene::draw()
 		//Below is Dubeg box for the Obstacle
 		Util::DrawLine(m_pObstacle->getTransform()->position, m_pObstacle->getTransform()->position);
 		Util::DrawRect(m_pObstacle->getTransform()->position - glm::vec2(m_pObstacle->getWidth() * 0.5f, m_pObstacle->getHeight() * 0.5f), m_pObstacle->getWidth(), m_pObstacle->getHeight());
-
+		//Obs 2
+		Util::DrawLine(m_pObstacle2->getTransform()->position, m_pObstacle2->getTransform()->position);
+		Util::DrawRect(m_pObstacle2->getTransform()->position - glm::vec2(m_pObstacle2->getWidth() * 0.5f, m_pObstacle2->getHeight() * 0.5f), m_pObstacle2->getWidth(), m_pObstacle2->getHeight());
+		//Obs 3
+		Util::DrawLine(m_pObstacle3->getTransform()->position, m_pObstacle3->getTransform()->position);
+		Util::DrawRect(m_pObstacle3->getTransform()->position - glm::vec2(m_pObstacle3->getWidth() * 0.5f, m_pObstacle3->getHeight() * 0.5f), m_pObstacle3->getWidth(), m_pObstacle3->getHeight());
+		//Obs 4
+		Util::DrawLine(m_pObstacle4->getTransform()->position, m_pObstacle4->getTransform()->position);
+		Util::DrawRect(m_pObstacle4->getTransform()->position - glm::vec2(m_pObstacle4->getWidth() * 0.5f, m_pObstacle4->getHeight() * 0.5f), m_pObstacle4->getWidth(), m_pObstacle4->getHeight());
+	
 		m_displayGrid();
 		/*m_displayGridLOS();*/
 		
@@ -49,8 +61,16 @@ void PlayScene::update()
 	updateDisplayList();
 
 	CollisionManager::LOSCheck(m_pPlayer, m_pPlaneSprite, m_pObstacle);
+	CollisionManager::LOSCheck(m_pPlayer, m_pPlaneSprite, m_pObstacle2);
+	CollisionManager::LOSCheck(m_pPlayer, m_pPlaneSprite, m_pObstacle3);
+	CollisionManager::LOSCheck(m_pPlayer, m_pPlaneSprite, m_pObstacle4);
+
 	CollisionManager::AABBCheck(m_pPlayer, m_pPlaneSprite);
+
 	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle);
+	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle2);
+	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle3);
+	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle4);
 
 	m_setGridLOS();
 }
@@ -323,9 +343,30 @@ void PlayScene::start()
 	addChild(m_pPlayer);
 	m_playerFacingRight = false;
 
-	// Obstacle Texture
+	// Obstacle Texture 1
 	m_pObstacle = new Obstacle();
-	addChild(m_pObstacle);
+	{
+		m_pObstacle->getTransform()->position = glm::vec2(600.0f, 200.0f);
+		addChild(m_pObstacle);
+	}
+	//Obstacle 2
+	m_pObstacle2 = new Obstacle();
+	{
+		m_pObstacle2->getTransform()->position = glm::vec2(600.0f, 500.0f);
+		addChild(m_pObstacle2);
+	}
+	//Obstacle 3
+	m_pObstacle3 = new Obstacle();
+	{
+		m_pObstacle3->getTransform()->position = glm::vec2(200.0f, 200.0f);
+		addChild(m_pObstacle3);
+	}
+	//obstacle 4
+	m_pObstacle4 = new Obstacle();
+	{
+		m_pObstacle4->getTransform()->position = glm::vec2(200.0f, 500.0f);
+		addChild(m_pObstacle4);
+	}
 
 	//Music
 	SoundManager::Instance().load("../Assets/audio/StartScenemusic.mp3", "StartScenemusic", SOUND_MUSIC);
@@ -392,6 +433,9 @@ void PlayScene::m_setGridLOS()
 	for (auto node : m_pGrid)
 	{
 		node->setLOS(CollisionManager::LOSCheck(node, m_pPlayer, m_pObstacle));
+		node->setLOS(CollisionManager::LOSCheck(node, m_pPlayer, m_pObstacle2));
+		node->setLOS(CollisionManager::LOSCheck(node, m_pPlayer, m_pObstacle3));
+		node->setLOS(CollisionManager::LOSCheck(node, m_pPlayer, m_pObstacle4));
 	}
 	
 }

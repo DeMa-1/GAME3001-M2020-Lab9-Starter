@@ -1,5 +1,4 @@
 #include "Obstacle.h"
-
 #include "TextureManager.h"
 
 Obstacle::Obstacle()
@@ -9,7 +8,7 @@ Obstacle::Obstacle()
 	const auto size = TextureManager::Instance()->getTextureSize("obstacle");
 	setWidth(size.x);
 	setHeight(size.y);
-	getTransform()->position = glm::vec2(400.0f, 300.0f);
+	/*getTransform()->position = glm::vec2(400.0f, 300.0f);*/
 	getRigidBody()->velocity = glm::vec2(0, 0);
 	getRigidBody()->isColliding = false;
 
