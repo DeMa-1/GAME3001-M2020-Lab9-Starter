@@ -49,7 +49,7 @@ void PlayScene::draw()
 		Util::DrawRect(m_pObstacle4->getTransform()->position - glm::vec2(m_pObstacle4->getWidth() * 0.5f, m_pObstacle4->getHeight() * 0.5f), m_pObstacle4->getWidth(), m_pObstacle4->getHeight());
 	
 		m_displayGrid();
-		/*m_displayGridLOS();*/
+		m_displayGridLOS();
 		
 	}
 	
@@ -93,7 +93,7 @@ void PlayScene::handleEvents()
 			if (EventManager::Instance().getGameController(0)->LEFT_STICK_X > deadZone)
 			{
 				/*m_pPlayer->getRigidBody()->velocity = glm::vec2(5.0f, 0.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.x;
+				m_pPlayer->getTransform()->position.x += m_pPlayer->getRigidBody()->velocity.x;
 				m_pPlayer->getRigidBody()->velocity.x *= m_pPlayer->getRigidBody()->velocity.x * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 				/*m_playerFacingRight = true;*/
@@ -102,7 +102,7 @@ void PlayScene::handleEvents()
 			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_X < deadZone)
 			{
 			/*	m_pPlayer->getRigidBody()->velocity = glm::vec2(-5.0f, 0.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.x;
+				m_pPlayer->getTransform()->position.x += m_pPlayer->getRigidBody()->velocity.x;
 				m_pPlayer->getRigidBody()->velocity.x *= m_pPlayer->getRigidBody()->velocity.x * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
 				/*m_playerFacingRight = false;*/
@@ -122,7 +122,7 @@ void PlayScene::handleEvents()
 			if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y > deadZone)
 			{
 				/*m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, -5.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.y;
+				m_pPlayer->getTransform()->position.y += m_pPlayer->getRigidBody()->velocity.y;
 			    m_pPlayer->getRigidBody()->velocity.y *= m_pPlayer->getRigidBody()->velocity.y * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_UP);
 				/*m_playerFacingRight = true;*/
@@ -131,7 +131,7 @@ void PlayScene::handleEvents()
 			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y < deadZone)
 			{
 				/*m_pPlayer->getRigidBody()->velocity = glm::vec2(0.0f, 5.0f);*/
-				m_pPlayer->getTransform()->position += m_pPlayer->getRigidBody()->velocity.y;
+				m_pPlayer->getTransform()->position.y += m_pPlayer->getRigidBody()->velocity.y;
 				m_pPlayer->getRigidBody()->velocity.y *= m_pPlayer->getRigidBody()->velocity.y * 0.9f;
 				m_pPlayer->setAnimationState(PLAYER_RUN_DOWN);
 				/*m_playerFacingRight = false;*/
@@ -195,7 +195,18 @@ void PlayScene::handleEvents()
 	
 		
 	}
-	
+
+	//Change Ability
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_N))
+	{
+			m_pPlayer->changeAbility();
+	}
+	//Use Current Ability
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_M))
+	{
+		m_pPlayer->useCurrentAbility(1);
+	}
+
 	//H Key Section
 	if (!m_bDebugKeys[H_KEY])
 	{
@@ -334,11 +345,11 @@ void PlayScene::start()
 	//Plane Sprite
 	m_pPlaneSprite = new Plane();
 	m_pPlaneSprite->getTransform()->position = m_pPatrolPath[0]->getTransform()->position;
-	m_pPlaneSprite->getRigidBody()->maxSpeed = 5.0f;
+	m_pPlaneSprite->getRigidBody()->maxSpeed = 4.0f;
 	addChild(m_pPlaneSprite);
 
 	// Player Sprite
-	m_pPlayer = new Player();
+	m_pPlayer = new Player(glm::vec2(600.0f, 400.0f));
 	m_pPlayer->getTransform()->position = glm::vec2(600.0f, 400.0f);
 	addChild(m_pPlayer);
 	m_playerFacingRight = false;
@@ -374,6 +385,7 @@ void PlayScene::start()
 	SoundManager::Instance().setAllVolume(10);
 	//Sound-FX
 	SoundManager::Instance().load("../Assets/audio/Grunting-sound.mp3", "Grunt", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/sword-1b.wav", "Sword", SOUND_SFX);
 }
 
 void PlayScene::m_buildGrid()
@@ -404,13 +416,14 @@ void PlayScene::m_displayGrid()
 				/*m_pGrid[row * Config::COL_NUM + col]->getHeight() * 0.5f), 5, 5);*/
 				
 			/*std::cout << "grid display position: " << row * Config::COL_NUM + col << std::endl;*/
-			auto colour = glm::vec4(1, 0, 1, 1);
+			auto colour = glm::vec4(0, 0, 1, 1);
+			Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlayer->getTransform()->position, colour);
 
 			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position - glm::vec2(m_pGrid[row * Config::COL_NUM + col]->getWidth() * 0.5f), 40, 40);
 
 			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position, 5, 5);
 
-			Util::DrawLine(m_pPlaneSprite->getTransform()->position, m_pPlayer->getTransform()->position, colour);
+			
 		}
 	}
 }
@@ -452,6 +465,7 @@ void PlayScene::m_buildPatrolPath()
 	{
 		m_pPatrolPath.push_back(m_pGrid[i * Config::COL_NUM + Config::COL_NUM - 1]);
 	}
+
 	//Plane moves left
 	for (auto i = 1; i < Config::COL_NUM; i++)
 	{

@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "TextureManager.h"
-
-Player::Player(): m_currentAnimationState(PLAYER_IDLE_RIGHT)
+#include "Melee.h"
+#include "Ability.h"
+Player::Player(glm::vec2 pos): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 {
 	TextureManager::Instance()->loadSpriteSheet(
 		"../Assets/sprites/skeleton.txt",
@@ -12,18 +13,24 @@ Player::Player(): m_currentAnimationState(PLAYER_IDLE_RIGHT)
 	
 	// set frame width
 	setWidth(64);
-
 	// set frame height
 	setHeight(64);
+	//set position
+	setPosX(pos.x);
+	setPosY(pos.y + 8);
 
-	getTransform()->position = glm::vec2(600.0f, 500.0f);
-	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+	getTransform()->position = pos;
+	getRigidBody()->velocity = glm::vec2(2.0f, 2.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->maxSpeed = 5.0f;
 	getRigidBody()->isColliding = false;
+	addAbility(new Melee());
 	setType(PLAYER);
 
 	m_buildAnimations();
+	m_pObject = this;
+	m_currentAbility = 0;
+
 }
 
 Player::~Player()
@@ -75,6 +82,9 @@ void Player::draw()
 
 void Player::update()
 {
+	setPosX(getTransform()->position.x);
+	setPosY(getTransform()->position.y + 8);
+
 }
 
 void Player::clean()
@@ -84,6 +94,45 @@ void Player::clean()
 void Player::setAnimationState(const PlayerAnimationState new_state)
 {
 	m_currentAnimationState = new_state;
+}
+
+
+void Player::addAbility(Ability* ability)
+{
+	if (m_pListAbilities.size() == 2)
+	{
+		m_pListAbilities[1] = m_pListAbilities[2];
+
+	}
+}
+
+void Player::deleteAbility()
+{
+	m_pListAbilities.erase(m_pListAbilities.begin() + 1);
+}
+
+void Player::useCurrentAbility(int player)
+{
+	if (player = 1)
+	{
+		if (m_pListAbilities.size() > 0)
+		{
+			m_pListAbilities[m_currentAbility]->execute(getTransform()->position, getAngle(), false);
+		}
+	}
+	
+}
+
+void Player::changeAbility()
+{
+	if (m_currentAbility + 1 < m_pListAbilities.size())
+	{
+		m_currentAbility++;
+	}
+	else
+	{
+		m_currentAbility = 0;
+	}
 }
 
 void Player::m_buildAnimations()

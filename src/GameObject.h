@@ -5,12 +5,11 @@
 #include "Transform.h"
 #include "RigidBody.h"
 #include <string>
-
-// enums
 #include "GameObjectType.h"
+#include <vector>
 
-
-class GameObject {
+class GameObject 
+{
 public:
 	GameObject();
 	virtual ~GameObject();
@@ -33,12 +32,18 @@ public:
 	// getters and setters for game object properties
 	int getWidth() const;
 	int getHeight() const;
+	int getPosx() const;
+	int getPosY() const;
+	int getAngle() const;
 	void setWidth(int new_width);
 	void setHeight(int new_height);
+	void setPosX(int new_posX);
+	void setPosY(int new_posY);
+	void getAngle(int new_angle);
 	GameObjectType getType() const;
 	void setType(GameObjectType new_type);
 
-private:
+protected:
 	// transform component
 	Transform m_transform;
 
@@ -48,7 +53,15 @@ private:
 	// size variables
 	int m_width;
 	int m_height;
+	int m_posX;
+	int m_posY;
+	int m_angle;
+	int m_pLife;
+	int m_pDamage;
+	GameObject* m_currentObject;
 	GameObjectType m_type;
+
+
 };
 
 #endif /* defined (__GAME_OBJECT__) */

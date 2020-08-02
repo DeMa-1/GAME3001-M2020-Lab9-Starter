@@ -51,7 +51,8 @@ public:
 	Uint32 getFrames() const;
 	bool isRunning() const;
 	void changeSceneState(SceneState new_state);
-	
+	Scene* getCurrentScene();
+		
 private:
 	Game();
 	~Game();

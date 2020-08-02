@@ -155,8 +155,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Ability.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\src\Melee.cpp" />
     <ClCompile Include="..\src\Obstacle.cpp" />
     <ClCompile Include="..\src\PathNode.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
@@ -184,12 +186,14 @@
     <ClCompile Include="..\src\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Ability.h" />
     <ClInclude Include="..\src\Animation.h" />
     <ClInclude Include="..\src\Button.h" />
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
     <ClInclude Include="..\src\DebugKeys.h" />
+    <ClInclude Include="..\src\Melee.h" />
     <ClInclude Include="..\src\Obstacle.h" />
     <ClInclude Include="..\src\PathNode.h" />
     <ClInclude Include="..\src\SoundType.h" />
